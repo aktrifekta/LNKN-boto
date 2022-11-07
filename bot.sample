@@ -21,6 +21,7 @@ url = 'https://www.linkedin.com/search/results/people/?keywords=vmware&origin=SW
 driver.get(url)
 time.sleep(2)
 
+### Make sure to have screen set to 67% in order to see the next button. It doesnt work unless the button is visible 
 
 def rerun():
     time.sleep(2)
