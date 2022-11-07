@@ -1,53 +1,48 @@
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
 
+
 driver = webdriver.Firefox(executable_path= '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/geckodriver')
 driver.get('https://www.linkedin.com/login?fromSignIn=true&trk=guest_homepage-basic_nav-header-signin')
-
 time.sleep(2)
-#********** LOG IN *************
 
 
-username = driver.find_element('xpath', "//input[@name = 'session_key']").send_keys('user@gmail.com')
-password = driver.find_element('xpath', "//input[@name = 'session_password']").send_keys('testpw')
-
+#Login
+username = driver.find_element('xpath', "//input[@name = 'session_key']").send_keys('usern@gmail.com')
+password = driver.find_element('xpath', "//input[@name = 'session_password']").send_keys('password')
 time.sleep(2)
 singin = driver.find_element('xpath', "//button[@type='submit']").click()
-
-#***************** ADD CONTACTS *********************** This must refresh and increase the page count by 1 if the 'connect' button is not found
-
-def nextpage():
-    startingpage = 3
-    startingpage += 1
-    site = 'https://www.linkedin.com/search/results/people/?keywords=vmware&network=%5B%22S%22%5D&origin=FACETED_SEARCH&page='
-    url = site + startingpage + '&sid=yl4'
-
-nextpage()
+time.sleep(2)
 
 
+url = 'https://www.linkedin.com/search/results/people/?keywords=vmware&origin=SWITCH_SEARCH_VERTICAL&sid=ijU'
+driver.get(url)
+time.sleep(2)
 
-def connect():
-    driver.get(url)
+
+def rerun():
     time.sleep(2)
-
     all_buttons = buttons = driver.find_elements(By.TAG_NAME, "button")
-
     connect_buttons = [btn for btn in all_buttons if btn.text == "Connect"]
 
-    for btn in connect_buttons:
-        driver.execute_script("arguments[0].click();", btn)
-        time.sleep(2)
-        send = driver.find_element('xpath', "//button[@aria-label='Send now']")
-        driver.execute_script("arguments[0].click();", send)
-        close = driver.find_element('xpath', "//button[@aria-label='Dismiss']")
-        driver.execute_script("arguments[0].click();", close)
-        time.sleep(2)
-        if btn == 0:
-            nextpage()
+    while len(connect_buttons) >= 1:
+        for btn in connect_buttons:
+            driver.execute_script("arguments[0].click();", btn)
+            time.sleep(2)
+            send = driver.find_element('xpath', "//button[@aria-label='Send now']")
+            driver.execute_script("arguments[0].click();", send)
+            close = driver.find_element('xpath', "//button[@aria-label='Dismiss']")
+            driver.execute_script("arguments[0].click();", close)
+            time.sleep(2)
+        else:   
+            driver.execute_script("window.scrollTo(0, 4000)")
+            time.sleep(2)
+            next_button = driver.find_element('xpath', "//button[@aria-label ='Next']").click()
+            time.sleep(5)
+            rerun()
 
-connect()
+rerun()
 
 
-   
-    
